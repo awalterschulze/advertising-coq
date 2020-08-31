@@ -6,6 +6,11 @@ Inductive mynat: Set :=
   | S' : mynat -> mynat (* 1 + mynat *)
   .
 
+Fixpoint sum_to_n (n: nat): nat :=
+  match n with
+  | O => 0
+  | (S n') => n + sum_to_n n'
+  end.
 
 (* Proof something by induction.
 2 * (sum 0 to n) = n (n + 1)
@@ -17,38 +22,69 @@ all equal 11 or n + 1
 there are n/2 number of these pairs
 so 2 * (sum 0 to n) = n (n + 1) *)
 
-Fixpoint sum_to_n (n: nat): nat :=
-  match n with
-  | O => 0
-  | (S n') => n + sum_to_n n'
-  end.
-
 Theorem sum_to_n_shortcut_works: forall (n: nat),
   2 * sum_to_n n = n * (n + 1).
 Proof.
+(* Let us demo induction by doing induction on n *)
 induction n.
-- simpl.
+- (* Lets simplify *)
+  simpl.
+  (* Easy *)
   reflexivity.
 - (*
     above the line we have the induction hypothesis
     below the line we have the goal.
   *)
-  unfold sum_to_n.
-  fold sum_to_n.
+  (*
+    does not seem like we can use the induction hypothesis yet
+    Lets make sum_to_n take a single step
+  *)
+  unfold sum_to_n; fold sum_to_n.
+  (*
+  Now we want redistribute `2 *` over
+  `S n` and `sum_to_n n` respectively.
+  There should be proof somewhere.
+  Lets Search for it.
+  *)
   SearchRewrite (_ * (_ + _)).
+  (* Lets use this proof to rewrite our goal *)
   rewrite Nat.mul_add_distr_l.
+  (* Now we can see our induction hypothesis *)
   rewrite IHn.
-  (* at this point the ring tactic is enough, but what if we don't use it. *)
+  (* 
+    At this point the ring tactic is enough,
+    but what if we don't use it. 
+  *)
+  (*
+    We know S X = X + 1, but we have a mix
+    Lets make it consistent.
+  *)
   Search (?X + 1 = S ?X).
   repeat rewrite Nat.add_1_r.
-  (* 2 * ?X + n * ?X *)
+  (* We want to undistribute
+     2 * S n + n * S n
+     to be
+     (2 + n) * S n
+  *)
   Search (_ * ?X + _ * ?X).
   rewrite <- Nat.mul_add_distr_r.
+  (*
+    I want to swap the multiplication using commutativity.
+    I guess it might be call mul_comm, but lets check.
+  *)
   Check Nat.mul_comm.
+  (*
+    Now lets rewrite and set the n variable to 2 + n.
+  *)
   rewrite Nat.mul_comm with (n := (2 + n)).
+  (*
+    That is close enough,
+    I think Coq can figure out this is equal
+  *)
   reflexivity.
 Qed.
 
+(* This proof could also have been a lot shorter *)
 Theorem sum_to_n_shortcut_works_shorter: forall (n: nat),
   2 * sum_to_n n = n * (n + 1).
 Proof.
@@ -57,15 +93,8 @@ induction n.
   reflexivity.
 - unfold sum_to_n.
   fold sum_to_n.
-  SearchRewrite (_ * (_ + _)).
   rewrite Nat.mul_add_distr_l.
   rewrite IHn.
+  (* See ring HERE *)
   ring.
 Qed.
-
-Definition reverse {A: Type} (xs: list A) := xs.
-
-Theorem double_reverse:
-	forall (A: Type) (AS: list A),
-	reverse (reverse AS) = AS.
-Proof.
