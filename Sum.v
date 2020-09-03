@@ -12,6 +12,9 @@ Fixpoint sum_to_n (n: nat): nat :=
   | (S n') => n + sum_to_n n'
   end.
 
+Ltac step X :=
+  unfold X; fold X.
+
 (* Proof something by induction.
 2 * (sum 0 to n) = n (n + 1)
 
@@ -39,7 +42,7 @@ induction n.
     does not seem like we can use the induction hypothesis yet
     Lets make sum_to_n take a single step
   *)
-  unfold sum_to_n; fold sum_to_n.
+  step sum_to_n.
   (*
   Now we want redistribute `2 *` over
   `S n` and `sum_to_n n` respectively.
@@ -65,8 +68,10 @@ induction n.
      2 * S n + n * S n
      to be
      (2 + n) * S n
+     Factor out the S n
   *)
   Search (_ * ?X + _ * ?X).
+  (* We want to rewrite in the opposite direction *)
   rewrite <- Nat.mul_add_distr_r.
   (*
     I want to swap the multiplication using commutativity.
@@ -89,12 +94,9 @@ Theorem sum_to_n_shortcut_works_shorter: forall (n: nat),
   2 * sum_to_n n = n * (n + 1).
 Proof.
 induction n.
-- simpl.
-  reflexivity.
-- unfold sum_to_n.
-  fold sum_to_n.
+- reflexivity.
+- step sum_to_n.
   rewrite Nat.mul_add_distr_l.
   rewrite IHn.
-  (* See ring HERE *)
   ring.
 Qed.

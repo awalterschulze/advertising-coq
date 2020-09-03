@@ -7,7 +7,7 @@ Require Import Strings.String.
 
    I will buy you a copy of CoqArt 
    if you are one of the first two contributing to my repo,
-   as in making a pull request that solves a `Good First Issue`, more details here:
+   that makes a pull request that solves a `Good First Issue`, more details here:
    https://github.com/awalterschulze/regex-reexamined-coq/issues/17
 
    GetFreeBook says whether a person with a name is getting a free book,
@@ -98,9 +98,10 @@ Inductive WalterIsOutOfMoney: Prop := .
 Inductive MyFalse: Prop := .
 (* Continuing the Curry-Howard Isomorphism
    This is the Absurd data type, which has no constructors.
-   Doesn't seem like Walter run out of money,
+   Doesn't seem like Walter will run out of money,
    but he is trying to passively aggressively say
-   that these books aren't cheap.
+   that these books aren't cheap and
+   he is not buying everyone a book, I am sorry.
 *)
 
 (* I wonder if it is possible to have a book anyway *)
@@ -112,7 +113,7 @@ Inductive MyTrue: Prop :=
   | I: MyTrue.
 (* Continuing the Curry-Howard Isomorphism
    This is the Unit data type, which represents one value
-   and you can always construct out of thin air.
+   that you can always construct out of thin air.
 *)
 
 (* Seems it is always possible to get a book *)
@@ -142,14 +143,14 @@ Inductive Contains (you: string): list string -> Prop :=
     Contains you others -> Contains you (another :: others)
   .
 
-Inductive BonusPoints (all_contributors: list string) (you: string): Prop :=
+Inductive BonusPoints (you: string) (all_contributors: list string): Prop :=
   | bonus_points:
     (* 
        If you contribute not just if you are the first or second contributor.
        You can get bonus points for the functional programming course.
     *)
     Contains you all_contributors ->
-    BonusPoints all_contributors you.
+    BonusPoints you all_contributors.
 
 (* 
    `not A`
@@ -163,7 +164,7 @@ Theorem no_bonus_points_for_you:
   forall (you: string)
          (contributors: list string),
          not (Contains you contributors) ->
-         not (BonusPoints contributors you).
+         not (BonusPoints you contributors).
 Proof.
 intros.
 unfold not.

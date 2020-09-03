@@ -38,7 +38,7 @@ f a.
 (*
 We do a little more complex implication.
 If we have a map from P to Q and Q to R,
-then we can decide a mapping from P to R.
+then we can decude a mapping from P to R.
 
 P -> Q    Q -> R
 ----------------
@@ -72,7 +72,7 @@ apply f in p.
 (* now lets apply g in p to get R *)
 apply g in p.
 (* now we have R *)
-exact p.
+assumption.
 Qed.
 
 (* Again to programmers this is just
@@ -123,17 +123,17 @@ A /\ B
    A
 *)
 Theorem conjunction (A: Prop) (B: Prop):
-  forall (E: A /\ B), A.
+  forall (pair: A /\ B), A.
 Proof.
-intros.
+intros pair.
 (*
 If we squint this looks just like the `product` function below.
 This is because logical conjunction is the same as:
 products, pairs, tuples or records in programming.
 *)
 exact (
-  match E with
-  | conj A _ => A
+  match pair with
+  | conj A _B => A
   end
 ).
 Qed.
@@ -162,6 +162,7 @@ This is because logical disjunction is the same as:
 sum types, coproducts or algebriac data types in programming.
 *)
 exact (
+  (* Right b *)
   or_intror b
 ).
 Qed.
@@ -172,4 +173,5 @@ Qed.
 *)
 Definition sum (A: Set) (B: Set)
   (b: B): A + B :=
+(* Right b *)
 inr b.
