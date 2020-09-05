@@ -90,6 +90,7 @@ Theorem implication2c (P Q R: Prop):
   forall (f: P -> Q) (g: Q -> R), P -> R.
 Proof.
 intros f g.
+(* This program is a proof *)
 exact (fun p =>
   g (f p)
 ).
@@ -133,7 +134,7 @@ products, pairs, tuples or records in programming.
 *)
 exact (
   match pair with
-  | conj A _B => A
+  | conj A B => A
   end
 ).
 Qed.
@@ -142,7 +143,7 @@ Qed.
 Definition product (A: Set) (B: Set)
   (pair: A * B): A :=
 match pair with
-  | (a, _) => a
+  | (a, b) => a
 end.
 
 (*
@@ -155,6 +156,10 @@ A \/ B
 Theorem disjunction (A: Prop) (B: Prop):
   forall (b: B), A \/ B.
 Proof.
+intros.
+right.
+assumption.
+Restart.
 intros.
 (*
 If we squint this looks just like the `sum` function below.

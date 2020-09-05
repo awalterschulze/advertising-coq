@@ -89,13 +89,16 @@ Qed.
 (* After buying two contributors a book,
    I will be out of money.
 *)
+
 Inductive WalterIsOutOfMoney: Prop := .
+
 (* Doesn't seem like this induction predicate can be constructed.
    It doesn't have any constructors, hmmm.
    Is it possible for Walter to run out of money?
 *)
 
 Inductive MyFalse: Prop := .
+
 (* Continuing the Curry-Howard Isomorphism
    This is the Absurd data type, which has no constructors.
    Doesn't seem like Walter will run out of money,
@@ -112,7 +115,7 @@ Inductive HaveTheBook: Prop :=
 Inductive MyTrue: Prop :=
   | I: MyTrue.
 (* Continuing the Curry-Howard Isomorphism
-   This is the Unit data type, which represents one value
+   This is the Unit data type `()`, which represents one value
    that you can always construct out of thin air.
 *)
 
@@ -138,9 +141,9 @@ Qed.
 Inductive Contains (you: string): list string -> Prop :=
   | head_contributor (others: list string):
     Contains you (you :: others)
-  | a_contributor (another: string) (others: list string):
+  | a_contributor (another: string) (others_and_you: list string):
     (* This is the recursive bit *)
-    Contains you others -> Contains you (another :: others)
+    Contains you others_and_you -> Contains you (another :: others_and_you)
   .
 
 Inductive BonusPoints (you: string) (all_contributors: list string): Prop :=
@@ -179,3 +182,49 @@ destruct B.
   *)
 contradiction.
 Qed.
+
+Fixpoint contains (x: string) (xs: list string): bool :=
+  match xs with
+  | [] => false
+  | (x'::xs') =>
+    if eqb x x'
+    then true
+    else contains x xs'
+  end.
+
+Theorem contains_correct:
+  forall (x: string) (xs: list string),
+  contains x xs = true <-> Contains x xs.
+Proof.
+intros.
+split.
+- intros.
+  induction xs.
+  + cbn in H.
+    discriminate.
+  + cbn in H.
+    remember (eqb x a).
+    destruct b.
+    * Search eqb.
+      symmetry in Heqb.
+      rewrite eqb_eq in Heqb.
+      subst.
+      apply head_contributor.
+    * apply a_contributor.
+      apply IHxs.
+      assumption.
+- intros.
+  induction xs.
+  + inversion H.
+  + inversion H.
+    * cbn.
+      rewrite eqb_refl.
+      reflexivity.
+    * subst.
+      cbn.
+      apply IHxs in H1.
+      rewrite H1.
+      remember (eqb x a).
+      destruct b; reflexivity.
+Qed.
+

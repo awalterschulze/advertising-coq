@@ -26,7 +26,7 @@ there are n/2 number of these pairs
 so 2 * (sum 0 to n) = n (n + 1) *)
 
 Theorem sum_to_n_shortcut_works: forall (n: nat),
-  2 * sum_to_n n = n * (n + 1).
+  2 * sum_to_n n = n * S n.
 Proof.
 (* Let us demo induction by doing induction on n *)
 induction n.
@@ -54,16 +54,6 @@ induction n.
   rewrite Nat.mul_add_distr_l.
   (* Now we can see our induction hypothesis *)
   rewrite IHn.
-  (* 
-    At this point the ring tactic is enough,
-    but what if we don't use it. 
-  *)
-  (*
-    We know S X = X + 1, but we have a mix
-    Lets make it consistent.
-  *)
-  Search (?X + 1 = S ?X).
-  repeat rewrite Nat.add_1_r.
   (* We want to undistribute
      2 * S n + n * S n
      to be
@@ -91,7 +81,7 @@ Qed.
 
 (* This proof could also have been a lot shorter *)
 Theorem sum_to_n_shortcut_works_shorter: forall (n: nat),
-  2 * sum_to_n n = n * (n + 1).
+  2 * sum_to_n n = n * S n.
 Proof.
 induction n.
 - reflexivity.
