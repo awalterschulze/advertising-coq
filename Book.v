@@ -2,14 +2,14 @@ Require Import List.
 Import ListNotations.
 Require Import Strings.String.
 
-(* GetFreeBook is an inductive predicate that defines a few ways
-   that will result in Walter buying you a book.
-
-   I will buy you a copy of CoqArt 
-   if you are one of the first two contributing to my repo,
-   that makes a pull request that solves a `Good First Issue`, more details here:
+(* 
+   I will buy you a copy of the book: CoqArt, 
+   if you are one of the first two contributing to this repo,
    https://github.com/awalterschulze/regex-reexamined-coq/issues/17
+   that makes a pull request that solves a `Good First Issue`.
 
+   GetFreeBook is an inductive predicate that defines a few ways
+   that will result in Walter buying you a book.
    GetFreeBook says whether a person with a name is getting a free book,
    based on the list of contributors.
 *)
@@ -20,7 +20,8 @@ Inductive GetFreeBook (contributors: list string) (you: string): Prop :=
   | only_contributor:
     contributors = [you]
     -> GetFreeBook contributors you
-  (* But you could also be the first contributor, in a long list of contributors.
+  (* But you could also be the first contributor,
+     in a long list of contributors.
      This is means there exists a list of other contributors
      and you are the first or second in the list.
   *)
@@ -48,7 +49,7 @@ Theorem you_get_a_free_book_if_you_are_the_only_contributor:
 Proof.
 intros.
 apply only_contributor.
-assumption.
+exact H.
 Qed.
 
 (* We can also prove that I will buy you a book,
@@ -76,11 +77,10 @@ destruct H.
   exists someone.
   exists others.
   (* This looks provable *)
-  split.
-  + assumption.
-  + left.
-    reflexivity.
-- exists someone.
+  auto.
+- (* Now it is easy to also proof that case,
+     where you are the second contributor. *)
+  exists someone.
   exists you.
   exists others.
   auto.
@@ -100,7 +100,7 @@ Inductive WalterIsOutOfMoney: Prop := .
 Inductive MyFalse: Prop := .
 
 (* Continuing the Curry-Howard Isomorphism
-   This is the Absurd data type, which has no constructors.
+   This is the Void data type, which has no constructors.
    Doesn't seem like Walter will run out of money,
    but he is trying to passively aggressively say
    that these books aren't cheap and
@@ -212,7 +212,7 @@ split.
       apply head_contributor.
     * apply a_contributor.
       apply IHxs.
-      assumption.
+      exact H.
 - intros.
   induction xs.
   + inversion H.

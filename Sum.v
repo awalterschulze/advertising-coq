@@ -47,7 +47,8 @@ induction n.
   Now we want redistribute `2 *` over
   `S n` and `sum_to_n n` respectively.
   There should be proof somewhere.
-  Lets Search for it.
+  Lets Search for it in the proofs
+  that comes with the Coq Standard Library.
   *)
   SearchRewrite (_ * (_ + _)).
   (* Lets use this proof to rewrite our goal *)

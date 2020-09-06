@@ -10,17 +10,28 @@ Definition not := negb.
 Theorem deMorgen: forall x y:bool,
   not (x || y) = (not x) && (not y).
 Proof.
+Abort.
+
+Theorem deMorgen_answer: forall x y:bool,
+  not (x || y) = (not x) && (not y).
+Proof.
 intros.
-(* We can start by destructing x into its two cases.
+(* We can start by doing case analysis on x into its two cases.
    Almost like a truth table for computer scientists or
    A very lame induction for mathematicians.
 *)
-destruct x.
+Print bool.
+(*
+  We can see that a bool is either true of false
+*)
+case x.
 (* Now we have two cases to prove,
    lets focus on our first goal
 *)
 - 
-(* Seems like some of this equation is simply solvable *)
+(* Seems like some of this equation is simply solvable.
+   simpl can partially apply functions,
+   for you have only supplied limited arguments. *)
   simpl.
 (* false = false is true by reflexivity *)
   reflexivity.
