@@ -102,7 +102,7 @@ Inductive MyFalse: Prop := .
 (* Continuing the Curry-Howard Isomorphism
    This is the Void data type, which has no constructors.
    Doesn't seem like Walter will run out of money,
-   but he is trying to passively aggressively say
+   but he is trying to passive aggressively say
    that these books aren't cheap and
    he is not buying everyone a book, I am sorry.
 *)

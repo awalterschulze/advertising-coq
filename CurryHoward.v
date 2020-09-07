@@ -103,6 +103,10 @@ Theorem conjunction (A: Prop) (B: Prop):
   A.
 Proof.
 intros pair.
+destruct pair.
+exact H.
+Restart.
+intros pair.
 (*
 If we squint this looks just like the `product` function below.
 This is because logical conjunction is the same as:

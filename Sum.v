@@ -77,6 +77,7 @@ induction n.
     That is close enough,
     I think Coq can figure out this is equal
   *)
+  step add.
   reflexivity.
 Qed.
 
