@@ -3,7 +3,7 @@
 This repo contains the code, notes and other resources for a presentation that advertises the Coq programming language:
 
 The slides:
-  - Are shared here: https://slides.com/walterschulze/advertising-coq
+  - Are shared here: https://slides.com/awalterschulze/advertising-coq
   - They contain all the speech as text
   - They also contain links to the code that is shared here, which also contain the speech during the demo as comments
 
